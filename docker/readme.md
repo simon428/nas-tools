@@ -4,13 +4,15 @@
 
 - 镜像层数少；
 
-- 支持 386/amd64/arm64/armv7 四大主流架构；
+- 支持 amd64/arm64 架构；
 
 - 重启即可更新程序，如果依赖有变化，会自动尝试重新安装依赖，若依赖自动安装不成功，会提示更新镜像；
 
 - 可以以非root用户执行任务，降低程序权限和潜在风险；
 
 - 可以设置文件掩码权限umask。
+
+- lite 版本不包含浏览器内核及xvfb，不支持浏览器仿真；不支持Rclone/Minio转移方式；不支持复杂依赖变更时的自动安装升级；但是体积更小。
 
 ## 创建
 
@@ -35,6 +37,7 @@ docker run -d \
     -e PGID=0     `# 想切换为哪个用户来运行程序，该用户的gid，详见下方说明` \
     -e UMASK=000  `# 掩码权限，默认000，可以考虑设置为022` \
     -e NASTOOL_AUTO_UPDATE=false `# 如需在启动容器时自动升级程程序请设置为true` \
+    -e NASTOOL_CN_UPDATE=false `# 如果开启了容器启动自动升级程序，并且网络不太友好时，可以设置为true，会使用国内源进行软件更新` \
     jxxghp/nas-tools
 ```
 
@@ -59,6 +62,7 @@ services:
       - PGID=0    # 想切换为哪个用户来运行程序，该用户的gid
       - UMASK=000 # 掩码权限，默认000，可以考虑设置为022
       - NASTOOL_AUTO_UPDATE=false  # 如需在启动容器时自动升级程程序请设置为true
+      - NASTOOL_CN_UPDATE=false # 如果开启了容器启动自动升级程序，并且网络不太友好时，可以设置为true，会使用国内源进行软件更新
      #- REPO_URL=https://ghproxy.com/https://github.com/jxxghp/nas-tools.git  # 当你访问github网络很差时，可以考虑解释本行注释
     restart: always
     network_mode: bridge
